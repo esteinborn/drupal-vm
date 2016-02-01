@@ -10,6 +10,9 @@ Prerequisites
 INSTRUCTIONS
 ============
 
+* Download the above prerequisites. 
+* unzip & copy/replace the C_Hashicorp/Vagrant/embedded/gems/gems/vagrant-1.xx/plugins/provisioners/ansible.zip with the ansible folder at the same path on your host computer
+
 Make sure your .ssh keys are setup and in the right place
 - https://help.github.com/articles/generating-an-ssh-key/
 -  Duplicate all .ssh files that live somewhere else into your c:/Users/YOUR-USERNAME/.ssh folder
