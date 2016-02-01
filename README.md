@@ -1,5 +1,3 @@
-### Forward `ssh-agent` TO Virtual Machine
-
 Prerequisites
 ============
 - Install Vagrant 1.7.4 (should work w/ vagrant-1.8.1 too)
@@ -17,6 +15,7 @@ Make sure your .ssh keys are setup and in the right place
 -  Duplicate all .ssh files that live somewhere else into your c:/Users/YOUR-USERNAME/.ssh folder
 
 
+# Forward `ssh-agent` TO Virtual Machine
 Windows - The ssh-agent does not run by default and/or does not startup even after you run these commands.
 Solution: Run these commands each time, or add them to your .bash_profile or a shell script of some sort.
 This is a miserable problem and is documented here: http://stackoverflow.com/questions/17846529/could-not-open-a-connection-to-your-authentication-agent
