@@ -22,7 +22,7 @@ vagrant_public_ip: ""
 vagrant_synced_folders:
   # The first synced folder will be used for the default Drupal installation, if
   # build_makefile: is 'true'.
-  - local_path: C:\drupal\sites\<YOUR-ACQUIA-SITE-FOLDER>\docroot
+  - local_path: C:\drupal\sites\nysptracs-dev\docroot
     destination: /var/www/drupalvm
     type: nfs
     create: true

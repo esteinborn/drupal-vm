@@ -1,3 +1,118 @@
+### Forward `ssh-agent` TO Virtual Machine
+
+Prerequisites
+============
+- Install Vagrant 1.7.4 (should work w/ vagrant-1.8.1 too)
+- Install VirtualBox (latest version) **
+- Git Clone https://github.com/justinlevi/drupal-vm
+
+** Potential issue w/ Intel Ix Core situation.  You need to turn on virtualization in the BIOS
+
+
+INSTRUCTIONS
+============
+
+Make sure your .ssh keys are setup and in the right place
+- https://help.github.com/articles/generating-an-ssh-key/
+-  Duplicate all .ssh files that live somewhere else into your c:/Users/YOUR-USERNAME/.ssh folder
+
+
+Windows - The ssh-agent does not run by default and/or does not startup even after you run these commands.
+Solution: Run these commands each time, or add them to your .bash_profile or a shell script of some sort.
+This is a miserable problem and is documented here: http://stackoverflow.com/questions/17846529/could-not-open-a-connection-to-your-authentication-agent
+Below are three solutions that worked for me. YMMV
+
+# 3 below is my personal fav because it fires when I open Cmder
+
+1. Run this from git bash
+eval `ssh-agent -s`
+ssh-add
+
+or
+
+2. "C:\Program Files (x86)\Git\cmd\start-ssh-agent.cmd"
+from the Command Prompt
+
+or
+
+If you're using Cmder, do this:
+3. https://github.com/cmderdev/cmder/issues/193#issuecomment-63041617
+
+
+Download your Acquia Drush aliases
+https://docs.acquia.com/cloud/drush-aliases
+
+Extract them to your $HOME Directory
+- run this at your command prompt to find this location : echo %USERPROFILE%
+- Also, copy both .acquia & .drush folders into your site root
+
+Check to see if the following alias was created in your $HOME/.drush folder
+drupalvm.aliases.drushrc.php
+
+If not, then create it and add the following
+
+```
+$aliases['drupalvm.dev'] = array(
+  'uri' => 'drupalvm.dev',
+  'root' => '/var/www/drupalvm',
+  'remote-host' => 'drupalvm.dev',
+  'remote-user' => 'vagrant',
+  'ssh-options' => '-o PasswordAuthentication=no -i ~/.vagrant.d/insecure_private_key',
+);
+```
+
+Create the following directory for you drupalvm settings.php file
+`sites/all/drupalvm.dev/settings.php`
+
+```
+ <?php
+  $databases['default']['default'] = array(
+    'driver' => 'mysql',
+    'database' => 'drupal',
+    'username' => 'drupal',
+    'password' => 'drupal',
+    'host' => 'localhost',
+   'prefix' => '',
+  );
+
+  $conf['securepages_enable'] = FALSE;
+  $conf['file_private_path'] = '/var/www/drupalvm/drupal-private-file-system';
+  $conf['file_temporary_path'] = '/var/www/drupalvm/drupal-temporary-path';
+  ```
+
+#Download the database to your local virtual machine
+$ `drush @nysptracs.dev sql-dump | drush @drupalvm.drupalvm.dev sql-cli`
+
+#Install the Drush registry_rebuild "module"
+Note: For Drupal 7 I needed to make sure I had the `drush registry_rebuild` available and it doesn't ship with drush 8. You can install it via:
+
+$ `drush @drupalvm.drupalvm.dev dl registry_rebuild`
+
+clear your drush cache
+$ `drush @drupalvm.drupalvm.dev cc drush`
+
+Next I had to manually truncate all database tables
+
+##This should work, but it doesn't - Currently just lists out the truncate SQL that would need to run.
+```
+drush @drupalvm.drupalvm.dev sql-query "SELECT DISTINCT concat(\"TRUNCATE TABLE \", TABLE_NAME, \";\") FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE \"cache%\";"
+```
+##Alternatively - login to the http://adminer.drupalvm.dev and select all of the cache tables, and truncate them.
+// TODO: figure out how to automate this.
+u: drupal
+p: drupal
+db: drupal
+
+
+Finally you need to rebuild the registry via
+
+`drush @drupalvm.drupalvm.dev rr --fire-bazooka`
+
+
+Drupal-VM Original Readme below
+=======================================
+
+
 ![Drupal VM Logo](https://raw.githubusercontent.com/geerlingguy/drupal-vm/master/docs/images/drupal-vm-logo.png)
 
 [![Build Status](https://travis-ci.org/geerlingguy/drupal-vm.svg?branch=master)](https://travis-ci.org/geerlingguy/drupal-vm) [![Documentation Status](https://readthedocs.org/projects/drupal-vm/badge/?version=latest)](http://docs.drupalvm.com)
@@ -12,16 +127,15 @@ It will install the following on an Ubuntu 14.04 (by default) linux VM:
   - PHP 5.6.x (configurable)
   - MySQL 5.5.x
   - Drush (configurable)
+  - Drupal Console (if using Drupal 8+)
   - Drupal 6.x, 7.x, or 8.x.x (configurable)
   - Optional:
-    - Drupal Console
     - Varnish 4.x (configurable)
     - Apache Solr 4.10.x (configurable)
     - Node.js 0.12 (configurable)
     - Selenium, for testing your sites via Behat
     - Ruby
     - Memcached
-    - Redis
     - XHProf, for profiling your code
     - XDebug, for debugging your code
     - Adminer, for accessing databases directly
@@ -61,7 +175,7 @@ Note for Faster Provisioning (Mac/Linux only): *[Install Ansible](http://docs.an
 
 Note for Linux users: *If NFS is not already installed on your host, you will need to install it to use the default NFS synced folder configuration. See guides for [Debian/Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-ubuntu-14-04), [Arch](https://wiki.archlinux.org/index.php/NFS#Installation), and [RHEL/CentOS](https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-centos-6).*
 
-Note on versions: *Please make sure you're running the latest stable version of Vagrant, VirtualBox, and Ansible, as the current version of Drupal VM is tested with the latest releases. As of August 2015: Vagrant 1.8.0, VirtualBox 5.0.12, and Ansible 2.0.0.*
+Note on versions: *Please make sure you're running the latest stable version of Vagrant, VirtualBox, and Ansible, as the current version of Drupal VM is tested with the latest releases. As of August 2015: Vagrant 1.7.4, VirtualBox 5.0.2, and Ansible 1.9.2.*
 
 ### 2 - Build the Virtual Machine
 
@@ -102,7 +216,22 @@ If you don't want or need one or more of these extras, just delete them or comme
 
 ## Using Drupal VM
 
-Drupal VM is built to integrate with every developer's workflow. Many guides for using Drupal VM for common development tasks are available on the [Drupal VM documentation site](http://docs.drupalvm.com).
+Drupal VM is built to integrate with every developer's workflow. Many guides for using Drupal VM for common development tasks are available on the [Drupal VM documentation site](http://docs.drupalvm.com):
+
+  - [Syncing Folders](http://docs.drupalvm.com/en/latest/extras/syncing-folders/)
+  - [Connect to the MySQL Database](http://docs.drupalvm.com/en/latest/extras/mysql/)
+  - [Use Apache Solr for Search](http://docs.drupalvm.com/en/latest/extras/solr/)
+  - [Use Drush with Drupal VM](http://docs.drupalvm.com/en/latest/extras/drush/)
+  - [Use Drupal Console with Drupal VM](http://docs.drupalvm.com/en/latest/extras/drupal-console/)
+  - [Use Varnish with Drupal VM](http://docs.drupalvm.com/en/latest/extras/varnish/)
+  - [Use MariaDB instead of MySQL](http://docs.drupalvm.com/en/latest/extras/mariadb/)
+  - [View Logs with Pimp my Log](http://docs.drupalvm.com/en/latest/extras/pimpmylog/)
+  - [Profile Code with XHProf](http://docs.drupalvm.com/en/latest/extras/xhprof/)
+  - [Debug Code with XDebug](http://docs.drupalvm.com/en/latest/extras/xdebug/)
+  - [Catch Emails with MailHog](http://docs.drupalvm.com/en/latest/extras/mailhog/)
+  - [Test with Behat and Selenium](http://docs.drupalvm.com/en/latest/extras/behat/)
+  - [PHP 7 on Drupal VM](http://docs.drupalvm.com/en/latest/other/php-7/)
+  - [Drupal 6 Notes](http://docs.drupalvm.com/en/latest/other/drupal-6/)
 
 ## Other Notes
 
