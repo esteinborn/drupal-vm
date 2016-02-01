@@ -10,6 +10,8 @@ vagrant_hostname: drupalvm.dev
 vagrant_machine_name: drupalvm
 vagrant_ip: 192.168.88.88
 
+#private_key_path: F:\.ssh\id_rsa
+
 # Allow Drupal VM to be accessed via a public network interface on your host.
 # Vagrant boxes are insecure by default, so be careful. You've been warned!
 # See: https://docs.vagrantup.com/v2/networking/public_network.html

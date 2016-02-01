@@ -37,6 +37,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.ssh.insert_key = false
+  #config.ssh.private_key_path = vconfig['private_key_path']
   config.ssh.forward_agent = true
 
   config.vm.box = vconfig['vagrant_box']

@@ -1,3 +1,98 @@
+### Forward `ssh-agent` TO Virtual Machine
+
+Prerequisites
+============
+- Install Vagrant 1.7.4
+- Install VirtualBox (latest version)
+- Git Clone https://github.com/justinlevi/drupal-vm
+
+
+INSTRUCTIONS
+============
+
+Make sure your .ssh keys are setup and in the right place
+- https://help.github.com/articles/generating-an-ssh-key/
+-  Duplicate all .ssh files that live somewhere else into your c:/Users/YOUR-USERNAME/.ssh folder
+
+
+Windows - The ssh-agent does not run by default and/or does not startup even after you run these commands.
+Solution: Run these commands each time, or add them to your .bash_profile or a shell script of some sort.
+This is a miserable problem and is documented here: http://stackoverflow.com/questions/17846529/could-not-open-a-connection-to-your-authentication-agent
+Below are three solutions that worked for me. YMMV
+
+# 3 below is my personal fav because it fires when I open Cmder
+
+1. Run this from git bash
+eval `ssh-agent -s`
+ssh-add
+
+or
+
+2. "C:\Program Files (x86)\Git\cmd\start-ssh-agent.cmd"
+from the Command Prompt
+
+or
+
+If you're using Cmder, do this:
+3. https://github.com/cmderdev/cmder/issues/193#issuecomment-63041617
+
+
+Download your Acquia Drush aliases
+https://docs.acquia.com/cloud/drush-aliases
+
+- extract them to your $HOME Directory
+- run this at your command prompt to find this location : echo %USERPROFILE%
+- Also, copy both .acquia & .drush folders into your site root
+
+Check to see if the following alias was created in your $HOME/.drush folder
+drupalvm.aliases.drushrc.php
+
+If not, then create it and add the following
+
+```
+$aliases['drupalvm.dev'] = array(
+  'uri' => 'drupalvm.dev',
+  'root' => '/var/www/drupalvm',
+  'remote-host' => 'drupalvm.dev',
+  'remote-user' => 'vagrant',
+  'ssh-options' => '-o PasswordAuthentication=no -i ~/.vagrant.d/insecure_private_key',
+);
+```
+
+Create the following directory for you drupalvm settings.php file
+`sites/all/drupalvm.dev/settings.php`
+
+```
+ <?php
+  $databases['default']['default'] = array(
+    'driver' => 'mysql',
+    'database' => 'drupal',
+    'username' => 'drupal',
+    'password' => 'drupal',
+    'host' => 'localhost',
+   'prefix' => '',
+  );
+  ```
+
+Run this command to download the database to your local virtual machine
+`drush @nysptracs.dev sql-dump | drush @drupalvm.drupalvm.dev sql-cli`
+
+Note: For Drupal 7 I needed to make sure I had the `drush registry_rebuild` available and it doesn't ship with drush 8. You can install it via:
+
+`drush @drupalvm.drupalvm.dev dl registry_rebuild`
+
+Next I had to manually truncate all database tables
+
+```
+drush @drupalvm.drupalvm.dev sql-query "SELECT DISTINCT concat(\"TRUNCATE TABLE \", TABLE_NAME, \";\") FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE \"cache%\";"
+
+```
+
+Finally you need to rebuild the registry via
+
+`drush @drupalvm.drupalvm.dev rr --fire-bazooka`
+
+
 ![Drupal VM Logo](https://raw.githubusercontent.com/geerlingguy/drupal-vm/master/docs/images/drupal-vm-logo.png)
 
 [![Build Status](https://travis-ci.org/geerlingguy/drupal-vm.svg?branch=master)](https://travis-ci.org/geerlingguy/drupal-vm) [![Documentation Status](https://readthedocs.org/projects/drupal-vm/badge/?version=latest)](http://docs.drupalvm.com)

@@ -10,6 +10,8 @@ vagrant_hostname: drupalvm.dev
 vagrant_machine_name: drupalvm
 vagrant_ip: 192.168.88.88
 
+#private_key_path: F:\.ssh\id_rsa
+
 # Allow Drupal VM to be accessed via a public network interface on your host.
 # Vagrant boxes are insecure by default, so be careful. You've been warned!
 # See: https://docs.vagrantup.com/v2/networking/public_network.html
@@ -21,7 +23,7 @@ vagrant_public_ip: ""
 vagrant_synced_folders:
   # The first synced folder will be used for the default Drupal installation, if
   # build_makefile: is 'true'.
-  - local_path: C:\drupal\sites\drupalvm
+  - local_path: C:\drupal\sites\<ACQUIA-LOCAL-SITE-FOLDER>\docroot
     destination: /var/www/drupalvm
     type: nfs
     create: true
@@ -35,17 +37,17 @@ drupalvm_webserver: apache
 
 # Set this to false if you are using a different site deployment strategy and
 # would like to configure 'vagrant_synced_folders' and 'apache_vhosts' manually.
-build_makefile: true
+build_makefile: false
 drush_makefile_path: /vagrant/drupal.make.yml
 
 # Set this to false if you don't need to install drupal (using the drupal_*
 # settings below), but instead copy down a database (e.g. using drush sql-sync).
-install_site: true
+install_site: false
 
 # Settings for building a Drupal site from a makefile (if 'build_makefile:'
 # is 'true').
 drupal_major_version: 7
-drupal_core_path: "/var/www/drupalvm/drupal"
+drupal_core_path: "/var/www/drupalvm"
 drupal_domain: "drupalvm.dev"
 drupal_site_name: "Drupal"
 drupal_install_profile: standard
@@ -84,17 +86,17 @@ apache_vhosts:
   - servername: "adminer.drupalvm.dev"
     documentroot: "/opt/adminer"
     extra_parameters: |
-          ProxyPassMatch ^/(.*\.php(/.*)?)$ "unix:/var/run/php5-fpm.sock|fcgi://127.0.0.1:9000/opt/adminer"
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000/opt/adminer"
 
   - servername: "xhprof.drupalvm.dev"
     documentroot: "/usr/share/php/xhprof_html"
     extra_parameters: |
-          ProxyPassMatch ^/(.*\.php(/.*)?)$ "unix:/var/run/php5-fpm.sock|fcgi://127.0.0.1:9000/usr/share/php/xhprof_html"
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000/usr/share/php/xhprof_html"
 
   - servername: "pimpmylog.drupalvm.dev"
     documentroot: "/usr/share/php/pimpmylog"
     extra_parameters: |
-          ProxyPassMatch ^/(.*\.php(/.*)?)$ "unix:/var/run/php5-fpm.sock|fcgi://127.0.0.1:9000/usr/share/php/pimpmylog"
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000/usr/share/php/pimpmylog"
 
 apache_remove_default_vhost: true
 apache_mods_enabled:
@@ -185,10 +187,11 @@ firewall_log_dropped_packets: false
 
 # PHP Configuration. Currently-supported versions: 5.5, 5.6, 7.0 (experimental).
 php_version: "5.6"
-php_memory_limit: "256M"
+php_memory_limit: "296M"
 php_display_errors: "On"
 php_display_startup_errors: "On"
 php_enable_php_fpm: 1
+php_fpm_listen: "127.0.0.1:9000"
 php_realpath_cache_size: "4096K"
 php_sendmail_path: "/usr/sbin/ssmtp -t"
 php_opcache_enabled_in_ini: true
@@ -237,4 +240,4 @@ solr_xmx: "128M"
 selenium_version: 2.46.0
 
 # Other configuration.
-known_hosts_path: ~/.ssh/known_hosts
+known_hosts_path: F:\.ssh\known_hosts
