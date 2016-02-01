@@ -127,7 +127,7 @@ Finally you need to rebuild the registry via
 # Visit your new fancy site @ 
 http://drupalvm.dev
 
-# Heavily Rejoic :tada:
+# Rejoice :tada:
 
 
 Drupal-VM Original Readme below
