@@ -43,6 +43,12 @@ or
 If you're using Cmder, do this:
 - 3. https://github.com/cmderdev/cmder/issues/193#issuecomment-63041617
 
+
+# Setup the Virtual Machine instance
+- cd into this repository directory
+- run `vagrant up`
+
+
 ===================
 
 ## Download your Acquia Drush aliases
