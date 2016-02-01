@@ -1,3 +1,6 @@
+#Getting Vagrant/Virtual Box/Drupal-VM working on a Windows box connected to Acquia
+This is a step-by-step for what worked for me.
+
 Prerequisites
 ============
 - Install Vagrant 1.7.4 (should work w/ vagrant-1.8.1 too)
