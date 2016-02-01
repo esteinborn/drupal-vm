@@ -72,6 +72,10 @@ Create the following directory for you drupalvm settings.php file
     'host' => 'localhost',
    'prefix' => '',
   );
+  
+  $conf['securepages_enable'] = FALSE;
+  $conf['file_private_path'] = '~/drupal-private-file-system';
+  $conf['file_temporary_path'] = '~/drupal-temporary-path';
   ```
 
 Run this command to download the database to your local virtual machine
@@ -83,10 +87,15 @@ Note: For Drupal 7 I needed to make sure I had the `drush registry_rebuild` avai
 
 Next I had to manually truncate all database tables
 
+
+##This should work, but it doesn't - Currently just lists out the truncate SQL that would need to run. 
 ```
 drush @drupalvm.drupalvm.dev sql-query "SELECT DISTINCT concat(\"TRUNCATE TABLE \", TABLE_NAME, \";\") FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE \"cache%\";"
 
 ```
+##Alternatively - login to the http://adminer.drupalvm.dev and select all of the cache tables, and truncate them. 
+// TODO: figure out how to automate this. 
+
 
 Finally you need to rebuild the registry via
 
