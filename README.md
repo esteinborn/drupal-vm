@@ -15,30 +15,31 @@ Make sure your .ssh keys are setup and in the right place
 -  Duplicate all .ssh files that live somewhere else into your c:/Users/YOUR-USERNAME/.ssh folder
 
 
-# Forward `ssh-agent` TO Virtual Machine
+### Forward `ssh-agent` TO Virtual Machine
 Windows - The ssh-agent does not run by default and/or does not startup even after you run these commands.
 Solution: Run these commands each time, or add them to your .bash_profile or a shell script of some sort.
 This is a miserable problem and is documented here: http://stackoverflow.com/questions/17846529/could-not-open-a-connection-to-your-authentication-agent
 Below are three solutions that worked for me. YMMV
 
-# 3 below is my personal fav because it fires when I open Cmder
+### \#3 below is my personal fav because it fires when I open Cmder
 
-1. Run this from git bash
+- 1. Run this from git bash
 eval `ssh-agent -s`
 ssh-add
 
 or
 
-2. "C:\Program Files (x86)\Git\cmd\start-ssh-agent.cmd"
+- 2. "C:\Program Files (x86)\Git\cmd\start-ssh-agent.cmd"
 from the Command Prompt
 
 or
 
 If you're using Cmder, do this:
-3. https://github.com/cmderdev/cmder/issues/193#issuecomment-63041617
+- 3. https://github.com/cmderdev/cmder/issues/193#issuecomment-63041617
 
+===================
 
-Download your Acquia Drush aliases
+## Download your Acquia Drush aliases
 https://docs.acquia.com/cloud/drush-aliases
 
 Extract them to your $HOME Directory
@@ -60,6 +61,8 @@ $aliases['drupalvm.dev'] = array(
 );
 ```
 
+## Connect to the database
+
 Create the following directory for you drupalvm settings.php file
 `sites/all/drupalvm.dev/settings.php`
 
@@ -79,7 +82,7 @@ Create the following directory for you drupalvm settings.php file
   $conf['file_temporary_path'] = '/var/www/drupalvm/drupal-temporary-path';
   ```
 
-#Download the database to your local virtual machine
+## Download the database to your local virtual machine
 $ `drush @nysptracs.dev sql-dump | drush @drupalvm.drupalvm.dev sql-cli`
 
 #Install the Drush registry_rebuild "module"
@@ -92,11 +95,12 @@ $ `drush @drupalvm.drupalvm.dev cc drush`
 
 Next I had to manually truncate all database tables
 
-##This should work, but it doesn't - Currently just lists out the truncate SQL that would need to run.
-```
-drush @drupalvm.drupalvm.dev sql-query "SELECT DISTINCT concat(\"TRUNCATE TABLE \", TABLE_NAME, \";\") FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE \"cache%\";"
-```
-##Alternatively - login to the http://adminer.drupalvm.dev and select all of the cache tables, and truncate them.
+##### This should work, but it doesn't - Currently just lists out the truncate SQL that would need to run.
+  ```
+  drush @drupalvm.drupalvm.dev sql-query "SELECT DISTINCT concat(\"TRUNCATE TABLE \", TABLE_NAME, \";\") FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE \"cache%\";"
+  ```
+
+## Alternatively - login to the http://adminer.drupalvm.dev and select all of the cache tables, and truncate them.
 // TODO: figure out how to automate this.
 u: drupal
 p: drupal
@@ -106,6 +110,12 @@ db: drupal
 Finally you need to rebuild the registry via
 
 `drush @drupalvm.drupalvm.dev rr --fire-bazooka`
+
+
+# Visit your new fancy site @ 
+http://drupalvm.dev
+
+# Heavily Rejoic :tada:
 
 
 Drupal-VM Original Readme below
