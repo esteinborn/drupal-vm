@@ -72,6 +72,8 @@ $aliases['drupalvm.dev'] = array(
   'ssh-options' => '-o PasswordAuthentication=no -i ~/.vagrant.d/insecure_private_key',
 );
 
+```
+
 ## Connect to the database
 
 Create the following directory for you drupalvm settings.php file
@@ -97,6 +99,7 @@ Create the following directory for you drupalvm settings.php file
 $ `drush @YOUR-ALIAS.dev sql-dump --structure-tables-list="hist*,cache*,*cache,sessions" | drush @drupalvm.drupalvm.dev sql-cli`
 
 #Install the Drush registry_rebuild "module"
+(This shouldn't be necessary - leaving here just for reference though)
 Note: For Drupal 7 I needed to make sure I had the `drush registry_rebuild` available and it doesn't ship with drush 8. You can install it via:
 
 $ `drush @drupalvm.drupalvm.dev dl registry_rebuild`
@@ -104,17 +107,15 @@ $ `drush @drupalvm.drupalvm.dev dl registry_rebuild`
 clear your drush cache
 $ `drush @drupalvm.drupalvm.dev cc drush`
 
-Next I had to manually truncate all database tables
-
-## Alternatively - login to the http://adminer.drupalvm.dev and select all of the cache tables, and truncate them.
-// TODO: figure out how to automate this.
+# Truncate all database tables
+(This shouldn't be necessary - leaving here just for reference though)
+login to the http://adminer.drupalvm.dev and select all of the cache tables, and truncate them.
 u: drupal
 p: drupal
 db: drupal
 
-
-Finally you need to rebuild the registry via
-
+# Rebuild the registry via
+(This shouldn't be necessary - leaving here just for reference though)
 `drush @drupalvm.drupalvm.dev rr --fire-bazooka`
 
 
