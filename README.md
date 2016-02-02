@@ -94,7 +94,7 @@ Create the following directory for you drupalvm settings.php file
   ```
 
 ## Download the database to your local virtual machine
-$ `drush @nysptracs.dev sql-dump --skip-tables-list="hist*,cache*,sessions" | drush @drupalvm.drupalvm.dev sql-cli`
+$ `drush @YOUR-ALIAS.dev sql-dump --structure-tables-list="hist*,cache*,*cache,sessions" | drush @drupalvm.drupalvm.dev sql-cli`
 
 #Install the Drush registry_rebuild "module"
 Note: For Drupal 7 I needed to make sure I had the `drush registry_rebuild` available and it doesn't ship with drush 8. You can install it via:
