@@ -63,15 +63,15 @@ drupalvm.aliases.drushrc.php
 
 If not, then create it and add the following
 
-```
+```php
+<?php
 $aliases['drupalvm.dev'] = array(
   'uri' => 'drupalvm.dev',
-  'root' => '/var/www/drupalvm',
+  'root' => '/var/www/docroot',
   'remote-host' => 'drupalvm.dev',
   'remote-user' => 'vagrant',
   'ssh-options' => '-o PasswordAuthentication=no -i ~/.vagrant.d/insecure_private_key',
 );
-
 ```
 
 ## Connect to the database
@@ -79,20 +79,20 @@ $aliases['drupalvm.dev'] = array(
 Create the following directory for you drupalvm settings.php file
 `sites/all/drupalvm.dev/settings.php`
 
-```
- <?php
-  $databases['default']['default'] = array(
+```php
+<?php
+$databases['default']['default'] = array(
     'driver' => 'mysql',
     'database' => 'drupal',
     'username' => 'drupal',
     'password' => 'drupal',
     'host' => 'localhost',
    'prefix' => '',
-  );
+);
 
-  $conf['securepages_enable'] = FALSE;
-  $conf['file_private_path'] = '/var/www/drupalvm/drupal-private-file-system';
-  $conf['file_temporary_path'] = '/var/www/drupalvm/drupal-temporary-path';
+$conf['securepages_enable'] = FALSE;
+$conf['file_private_path'] = '/var/www/drupal-private-file-system';
+$conf['file_temporary_path'] = '/var/www/drupal-temporary-path';
   ```
 
 ## Download the database to your local virtual machine
