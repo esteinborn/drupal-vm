@@ -21,7 +21,7 @@ Make sure your .ssh keys are setup and in the right place
 -  Duplicate all .ssh files that live somewhere else into your c:/Users/YOUR-USERNAME/.ssh folder
 
 
-### Forward `ssh-agent` TO Virtual Machine
+### Forward `ssh-agent` TO Virtual Machine (Windows only?)
 Windows - The ssh-agent does not run by default and/or does not startup even after you run these commands.
 Solution: Run these commands each time, or add them to your .bash_profile or a shell script of some sort.
 This is a miserable problem and is documented here: http://stackoverflow.com/questions/17846529/could-not-open-a-connection-to-your-authentication-agent
@@ -107,14 +107,14 @@ $ `drush @drupalvm.drupalvm.dev dl registry_rebuild`
 clear your drush cache
 $ `drush @drupalvm.drupalvm.dev cc drush`
 
-# Truncate all database tables
+### Truncate all database tables
 (This shouldn't be necessary - leaving here just for reference though)
 login to the http://adminer.drupalvm.dev and select all of the cache tables, and truncate them.
 u: drupal
 p: drupal
 db: drupal
 
-# Rebuild the registry via
+### Rebuild the registry via
 (This shouldn't be necessary - leaving here just for reference though)
 `drush @drupalvm.drupalvm.dev rr --fire-bazooka`
 
