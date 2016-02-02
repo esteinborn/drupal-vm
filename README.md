@@ -71,7 +71,6 @@ $aliases['drupalvm.dev'] = array(
   'remote-user' => 'vagrant',
   'ssh-options' => '-o PasswordAuthentication=no -i ~/.vagrant.d/insecure_private_key',
 );
-```
 
 ## Connect to the database
 
@@ -95,7 +94,7 @@ Create the following directory for you drupalvm settings.php file
   ```
 
 ## Download the database to your local virtual machine
-$ `drush @nysptracs.dev sql-dump | drush @drupalvm.drupalvm.dev sql-cli`
+$ `drush @nysptracs.dev sql-dump --skip-tables-list="hist*,cache*,sessions" | drush @drupalvm.drupalvm.dev sql-cli`
 
 #Install the Drush registry_rebuild "module"
 Note: For Drupal 7 I needed to make sure I had the `drush registry_rebuild` available and it doesn't ship with drush 8. You can install it via:
@@ -106,11 +105,6 @@ clear your drush cache
 $ `drush @drupalvm.drupalvm.dev cc drush`
 
 Next I had to manually truncate all database tables
-
-##### This should work, but it doesn't - Currently just lists out the truncate SQL that would need to run.
-  ```
-  drush @drupalvm.drupalvm.dev sql-query "SELECT DISTINCT concat(\"TRUNCATE TABLE \", TABLE_NAME, \";\") FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE \"cache%\";"
-  ```
 
 ## Alternatively - login to the http://adminer.drupalvm.dev and select all of the cache tables, and truncate them.
 // TODO: figure out how to automate this.
