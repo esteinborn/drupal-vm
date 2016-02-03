@@ -151,7 +151,7 @@ installed_extras:
   - ruby
   - selenium
   # - solr
-  - varnish
+  # - varnish
   - xdebug
   - xhprof
 
@@ -161,7 +161,10 @@ extra_packages:
 
 # `nodejs` must be in installed_extras for this to work.
 nodejs_version: "0.12"
-nodejs_npm_global_packages: []
+nodejs_npm_global_packages:
+- name: phantomjs
+- name: phantomcss
+- name: webdriverio
 
 # `ruby` must be in installed_extras for this to work.
 ruby_install_gems_user: "{{ vagrant_user }}"
@@ -207,13 +210,13 @@ php_fpm_listen: "127.0.0.1:9000"
 
 composer_path: /usr/bin/composer
 composer_home_path: '/home/vagrant/.composer'
-# composer_global_packages:
-#   - { name: phpunit/phpunit, release: '@stable' }
+composer_global_packages:
+  - { name: drupal/drupal-extension, release: '~3.0' }
 
 # Run specified scripts after VM is provisioned. Path is relative to the
 # `provisioning/playbook.yml` file.
 post_provision_scripts: []
-  # - "../examples/scripts/configure-solr.sh"
+# - "../post-provision.sh"
 
 # MySQL Configuration.
 mysql_root_password: root
