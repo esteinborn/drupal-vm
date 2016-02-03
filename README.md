@@ -44,6 +44,16 @@ If you're using Cmder, do this:
 - 3. https://github.com/cmderdev/cmder/issues/193#issuecomment-63041617
 
 
+# Make required config.yml changes
+You'll want to minimally change the following:
+```yaml
+vagrant_synced_folders:
+  # The first synced folder will be used for the default Drupal installation, if
+  # build_makefile: is 'true'.
+  - local_path: C:\drupal\sites\<SITE-YOU-WANT-TO-WORK-WITH>
+```
+
+
 # Setup the Virtual Machine instance
 - cd into this repository directory
 - run `vagrant up`
@@ -124,154 +134,9 @@ http://drupalvm.dev
 
 # Rejoice :tada:
 
-
-BeHat Tests 
-=======================
-* create a `btests` folder at the same level as your docroot
-* create a `btests/bhat.yml` file
-* create a `btests/composer.json` file
-* create a `btests/features` folder
-
-`behat.yml`
-```yaml
-default:
-  gherkin:
-    filters:
-      tags: "~@skip"
-  suites:
-    homepage:
-      paths: [%paths.base%/features/homepage]
-      contexts:
-        - FeatureContext
-        - DrupalFeatureContext
-        - Drupal\DrupalExtension\Context\MinkContext
-        - Drupal\DrupalExtension\Context\MessageContext
-        - Drupal\DrupalExtension\Context\DrushContext
-  extensions:
-    Behat\MinkExtension:
-      base_url: http://drupalvm.dev
-      files_path: '/var/www/btests/files'
-      goutte: ~
-      selenium2:
-        wd_host: "http://localhost:8643/wd/hub"
-    Drupal\DrupalExtension:
-      blackbox: ~
-      api_driver: 'drupal'
-      drush:
-        alias: 'local'
-      drupal:
-        drupal_root: '/var/www/docroot'
-      region_map:
-        header: "#header"
-        logo:  "#logo"
-      selectors:
-        message_selector: '.messages'
-        error_message_selector: '.messages.messages.error'
-        success_message_selector: '.messages.messages.status'
-
-```
-
-`composer.json`
-```yaml
-{
-  "require": {
-    "drupal/drupal-extension": "~3.0"
-},
-  "config": {
-    "bin-dir": "bin/"
-  }
-}
-```
-
-Run the following
-$ `cd btests`
-$ `composer install`
-
-
-create the following, or copy/paste from an existing project
-`btests/features/bootstrap/DrupalFeatureContext.php`
-`btests/features/bootstrap/FeatureContext.php`
-`btests/features/homepage/frontpage.freature`
-
-DrupalFeatureContext.php
-```php
-<?php
-
-use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
-
-/**
- * Defines application features from the specific context.
- */
-class DrupalFeatureContext extends RawDrupalContext implements SnippetAcceptingContext {
-
-  /**
-   * Initializes context.
-   *
-   * Every scenario gets its own context instance.
-   * You can also pass arbitrary arguments to the
-   * context constructor through behat.yml.
-   */
-  public function __construct() {
-  }
-
-}
-```
-
-FeatureContext.php
-```php
-<?php
-
-use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
-
-/**
- * Defines application features from the specific context.
- */
-class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext {
-
-  /**
-   * Initializes context.
-   *
-   * Every scenario gets its own context instance.
-   * You can also pass arbitrary arguments to the
-   * context constructor through behat.yml.
-   */
-  public function __construct() {
-  }
-
-}
-```
-
-
-frontpage.feature
-```php
-Feature:  Be the Borg
-  As a superior cybernetic organism
-  I need to assimilate other species
-  In order to grow the hive mind
-  And become the best borg I can be
-
-  Scenario:  Global Nav Area
-    Given I am on the homepage
-    Then I should see a ".nygov-universal-container" element
-
-  Scenario:  Global Footer Area
-    Given I am on the homepage
-    Then I should see a ".nys-global-footer" element
-
-```
-
-
-To run all tests
-$ `bin/behat`
-
-To run a specific test
-$ `bin/behat -s homepage`
+Behat tests
+======================================
+Coming Soon...
 
 
 
