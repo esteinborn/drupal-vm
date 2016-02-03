@@ -128,17 +128,16 @@ db: drupal
 (This shouldn't be necessary - leaving here just for reference though)
 `drush @drupalvm.drupalvm.dev rr --fire-bazooka`
 
-## Notes:
-If for some reason the the site doesn't load, you can try to restart the apache server
-$`vagrant ssh` // from within your drupal-vm folder
-$`sudo service apache2 stop`
-$`sudo service apache2 start`
-
-
 # Visit your new fancy site @ 
 http://drupalvm.dev
 
 # Rejoice :tada:
+
+### Notes:
+If for some reason the the site doesn't load, you can try to restart the apache server
+$`vagrant ssh` // from within your drupal-vm folder
+$`sudo service apache2 stop`
+$`sudo service apache2 start`
 
 Behat tests
 ======================================
