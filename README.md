@@ -44,6 +44,16 @@ If you're using Cmder, do this:
 - 3. https://github.com/cmderdev/cmder/issues/193#issuecomment-63041617
 
 
+# Make required config.yml changes
+You'll want to minimally change the following:
+```yaml
+vagrant_synced_folders:
+  # The first synced folder will be used for the default Drupal installation, if
+  # build_makefile: is 'true'.
+  - local_path: C:\drupal\sites\<SITE-YOU-WANT-TO-WORK-WITH>
+```
+
+
 # Setup the Virtual Machine instance
 - cd into this repository directory
 - run `vagrant up`
