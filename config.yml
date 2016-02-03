@@ -145,11 +145,11 @@ installed_extras:
   - drupalconsole
   - mailhog
   - memcached
-  # - nodejs
+  - nodejs
   - pimpmylog
   # - redis
-  # - ruby
-  # - selenium
+  - ruby
+  - selenium
   # - solr
   - varnish
   - xdebug
